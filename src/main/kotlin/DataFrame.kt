@@ -1,4 +1,5 @@
 import java.lang.IllegalStateException
+import java.util.*
 
 class DataFrame {
     private var myTable: MutableList<MutableList<Double>> = mutableListOf()
@@ -73,10 +74,14 @@ class DataFrame {
         return Pair(res1, res2)
     }
 
-    fun shuffleWith(other: DataFrame): Pair<DataFrame, DataFrame> {
+    fun shuffleWith(other: DataFrame, seed: Long? = null): Pair<DataFrame, DataFrame> {
         val thisColCnt = colsCnt()
         val un = this.joinColumns(other)
-        un.myTable.shuffle()
+        if (seed == null) {
+            un.myTable.shuffle()
+        } else {
+            un.myTable.shuffle(Random(seed))
+        }
         return un.splitColsBy(thisColCnt)
     }
 

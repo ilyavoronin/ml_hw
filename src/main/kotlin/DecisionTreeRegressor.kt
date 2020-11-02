@@ -14,6 +14,9 @@ class DecisionTreeRegressor(val maxDepth: Int, val minNodeData: Int) : Regressio
     }
 
     private var myRoot: Node? = null
+    override fun setParams(params: Params) {
+        TODO("Not yet implemented")
+    }
 
 
     override fun fit(table: DataFrame, target: DataFrame) {
