@@ -6,7 +6,7 @@ import Params
 import kotlin.math.log2
 import kotlin.math.pow
 
-class DecisionTreeClassifier(
+open class DecisionTreeClassifier(
         var maxDepth: Int,
         var minNodeData: Int,
         var parametersToUse: List<Int>? = null,
@@ -53,7 +53,7 @@ class DecisionTreeClassifier(
         var leftCoef: Double? = null
     }
 
-    private var myRoot: Node? = null
+    protected var myRoot: Node? = null
 
     override fun setParams(params: Params) {
         params.getParam("maxDepth")?.let { maxDepth = it.toInt() }
@@ -134,19 +134,38 @@ class DecisionTreeClassifier(
         val ldata = table.likeC()
         val rdata = table.likeC()
         val ltartget = target.likeC()
-        val rtargert = target.likeC()
+        val rtarget = target.likeC()
+
+        val unknownData = table.likeC()
+        val unknownTarget = target.likeC()
+
         (0 until table.rowsCnt()).forEach {i ->
-            if (table[i, bestInd] <= div) {
+            if (table[i, bestInd].isNaN()) {
+                unknownData.appendRow(table[i])
+                unknownTarget.appendRow(target[i])
+            } else if (table[i, bestInd] <= div) {
                 ldata.appendRow(table[i])
                 ltartget.appendRow(target[i])
             } else {
                 rdata.appendRow(table[i])
-                rtargert.appendRow(target[i])
+                rtarget.appendRow(target[i])
+            }
+        }
+
+        if (ldata.rowsCnt() > rdata.rowsCnt()) {
+            unknownData.getRows().forEachIndexed {i, row ->
+                ldata.appendRow(row)
+                ltartget.appendRow(unknownTarget[i])
+            }
+        } else {
+            unknownData.getRows().forEachIndexed {i, row ->
+                rdata.appendRow(row)
+                rtarget.appendRow(unknownTarget[i])
             }
         }
 
         buildTree(lnode, ldata, ltartget, depth + 1)
-        buildTree(rnode, rdata, rtargert, depth + 1)
+        buildTree(rnode, rdata, rtarget, depth + 1)
         node.left = lnode
         node.right = rnode
         node.featureIndex = bestInd
@@ -166,7 +185,7 @@ class DecisionTreeClassifier(
         return uncertantyFunction.f(target)
     }
 
-    private fun getAns(node: Node, row: List<Double>): Double {
+    protected fun getAns(node: Node, row: List<Double>): Double {
         if (node.isTerminal) {
             return node.ans!!
         }
