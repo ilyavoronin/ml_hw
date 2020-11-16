@@ -1,6 +1,6 @@
 import java.lang.Integer.min
 
-class CrossValidation(override val model: RegressionModel) : ModelEvaluator<List<Double>> {
+class CrossValidation(override val model: MLModel) : ModelEvaluator<List<Double>> {
     private var myK: Int = 0
     private var mySeed: Long? = null
 
@@ -42,7 +42,7 @@ class CrossValidation(override val model: RegressionModel) : ModelEvaluator<List
         return q.max()!!
     }
 
-    private fun runModel(model: RegressionModel, data: DataFrame, target: DataFrame, testData: DataFrame, testTarget: DataFrame): Double {
+    private fun runModel(model: MLModel, data: DataFrame, target: DataFrame, testData: DataFrame, testTarget: DataFrame): Double {
         model.fit(data, target)
 
         val res = model.predict(testData)

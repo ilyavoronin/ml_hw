@@ -6,7 +6,7 @@ class DataFrame {
     private var myRowsCnt: Int
     private var myColsCnt: Int
     constructor(table: List<List<String>>) {
-        table.forEach {row -> myTable.add(row.map {el -> el.toDouble()}.toMutableList())}
+        table.forEach {row -> myTable.add(row.map {el -> if (el.isNotBlank()) el.toDouble() else Double.NaN}.toMutableList())}
         myRowsCnt = myTable.size
         myColsCnt = myTable[0].size
     }
@@ -160,5 +160,16 @@ class DataFrame {
         }
         r.myColsCnt -= 1
         return Pair(column, r)
+    }
+
+    fun dropNan(): DataFrame {
+        return from2dList(myTable.filter {it.all {!it.isNaN()}}.toMutableList())
+    }
+
+    private fun from2dList(table: List<List<Double>>): DataFrame {
+        val res = DataFrame(0, table[0].size)
+
+        table.forEach {row -> res.appendRow(row)}
+        return res
     }
 }

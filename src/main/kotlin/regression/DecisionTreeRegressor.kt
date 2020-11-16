@@ -1,8 +1,11 @@
-import kotlin.math.ln
-import kotlin.math.min
+package regression
+
+import DataFrame
+import MLModel
+import Params
 import kotlin.math.pow
 
-class DecisionTreeRegressor(val maxDepth: Int, val minNodeData: Int) : RegressionModel {
+class DecisionTreeRegressor(val maxDepth: Int, val minNodeData: Int) : MLModel {
 
     class Node {
         var isTerminal: Boolean = false

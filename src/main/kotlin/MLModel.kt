@@ -1,6 +1,7 @@
+import DataFrame
+import Params
 
-
-interface RegressionModel {
+interface MLModel {
     fun setParams(params: Params)
 
     fun fit(table: DataFrame, target: DataFrame)

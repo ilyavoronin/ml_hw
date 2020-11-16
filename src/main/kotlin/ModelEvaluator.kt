@@ -1,5 +1,5 @@
 interface ModelEvaluator<T> {
-    val model: RegressionModel
+    val model: MLModel
 
     fun getQuality(data: DataFrame, target: DataFrame): T
 

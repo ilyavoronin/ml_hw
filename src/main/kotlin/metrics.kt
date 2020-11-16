@@ -18,3 +18,31 @@ fun meanSqError(data1: DataFrame, data2: DataFrame): Double {
 fun Collection<Double>.mean(): Double {
     return this.sum() / this.size
 }
+
+fun aucRoc(expected: DataFrame, actual: DataFrame): Double {
+
+    val exp = expected.tr()[0]
+    val act = actual.tr()[0]
+
+    val zipped = exp.zip(act).toMutableList()
+
+    zipped.shuffle()
+    zipped.sortBy {it.second}
+
+    val k1 = zipped.count {it.first == 1.0}
+    val k0 = zipped.size - k1
+
+    var res = 0.0
+
+    var curra = 0.0
+
+    zipped.reversed().forEach {(a, _) ->
+        if (a == 1.0) {
+            curra += 1.0 / k1
+        } else {
+            res += curra / k0
+        }
+    }
+
+    return res
+}

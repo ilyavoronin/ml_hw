@@ -1,11 +1,13 @@
-import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
-import java.io.File
+package regression
+
+import DataLoader
+import meanSqError
 
 fun main() {
     /*
     val MAX_DEPTH = 5
     val MIN_LEAFS = 3
-    val model = DecisionTreeRegressor(MAX_DEPTH, MIN_LEAFS)
+    val model = regression.DecisionTreeRegressor(MAX_DEPTH, MIN_LEAFS)
      */
 
     val SEED = 58L
